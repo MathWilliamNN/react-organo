@@ -1,0 +1,21 @@
+@import url(https://db.onlinewebfonts.com/c/97c4b25dc74e0ab045154e75a8fdd69d?family=Game+of+Thrones);
+
+.filiacao {
+    text-align: center;
+    padding: 32px;
+    font-family: "Game of Thrones";
+}
+
+.filiacao h3 {
+    font-size: 32px;
+    border-bottom: 4px solid;
+    display: inline-block;
+    padding-bottom: 8px;
+}
+
+.filiacao .personagens {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 32px;
+    flex-wrap: wrap;
+}
