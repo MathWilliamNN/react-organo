@@ -3,62 +3,101 @@ import { useState } from 'react';
 import Banner from './Componentes/Banner';
 import Formulario from './Componentes/Formulario';
 import Filiação from './Componentes/Filiação';
+import { v4 as uuidv4 } from 'uuid';
 
 function App() {
 
-  const filiacoes = [{
+  const [filiacoes, setFiliacoes] = useState([{
     nome: 'Casa Baratheon',
-    corPrimaria: '#57C278',
-    corSecundaria: '#D9F7E9',
+    cor: '#57C278',
+    id: uuidv4()
   },
   {
     nome: 'A Muralha',
-    corPrimaria: '#82CFFA',
-    corSecundaria: '#E8F8FF'
+    cor: '#82CFFA',
+    id: uuidv4()
   },
   {
     nome: 'Casa Greyjoy',
-    corPrimaria: '#A6D157',
-    corSecundaria: '#F0F8E2'
+    cor: '#A6D157',
+    id: uuidv4()
   },
   {
     nome: 'Casa Targaryen',
-    corPrimaria: '#E06B69',
-    corSecundaria: '#FDE7E8'
+    cor: '#E06B69',
+    id: uuidv4()
   },
   {
     nome: 'Casa Stark',
-    corPrimaria: '#DB6EBF',
-    corSecundaria: '#FAE9F5'
+    cor: '#DB6EBF',
+    id: uuidv4()
   },
   {
     nome: 'Casa Tyrell',
-    corPrimaria: '#FFBA05',
-    corSecundaria: '#FFF5D9'
+    cor: '#FFBA05',
+    id: uuidv4()
   },
   {
     nome: 'Casa Lannister',
-    corPrimaria: '#FF8A29',
-    corSecundaria: '#FFEEDF'
-  }];
+    cor: '#FF8A29',
+    id: uuidv4()
+  }]);
 
   const [personagens, setPersonagens] = useState([]);
 
   const aoNovoPersonagemAdicionado = (personagem) => {
     console.log(personagem);
+    personagem.id = uuidv4();
+    // personagem.favorito = false;
     setPersonagens([...personagens, personagem]);
-
   }
-  return (
+
+  function deletarColaborador(id) {
+    setPersonagens(personagens.filter(personagem => personagem.id !== id));
+  }
+
+  function mudarCorDaFiliacao(cor, id) {
+    setFiliacoes(filiacoes.map(filiacao => {
+      if (filiacao.id === id) {
+          filiacao.cor = cor;
+      }
+      return filiacao;
+    }))
+  }
+
+  function cadastrarFiliacao(novaFiliacao){
+    setFiliacoes([...filiacoes, {...novaFiliacao, id: uuidv4()}])
+  }
+
+  // function resolverFavorito(id) {
+  //   setPersonagens(personagens.map(personagem => {
+  //     if (personagem.id === id) {
+  //       console.log(personagem.favorito)
+  //       return { ...personagem, favorito: !personagem.favorito };
+  //     }
+  //     return personagem;
+  //   }));
+  // }
+
+   return (
     <div className="App">
       <Banner />
-      <Formulario filiacoes={filiacoes.map(filiacao => filiacao.nome)} aoPersonagemCadastrado={personagem => aoNovoPersonagemAdicionado(personagem)} />
-      {filiacoes.map(filiacao => <Filiação
-        key={filiacao.nome} 
-        nome={filiacao.nome}
-        corPrimaria={filiacao.corPrimaria}
-        corSecundaria={filiacao.corSecundaria}
-        personagens = {personagens.filter(personagem => personagem.filiacao === filiacao.nome)} ></Filiação>)}
+      <Formulario
+        cadastrarFiliacao = {cadastrarFiliacao}
+        filiacoes={filiacoes.map(filiacao => filiacao.nome)}
+        aoPersonagemCadastrado={personagem => aoNovoPersonagemAdicionado(personagem)}
+      />
+      {filiacoes.map(filiacao =>
+        <Filiação
+          key={filiacao.nome}
+          id={filiacao.id}
+          nome={filiacao.nome}
+          cor={filiacao.cor}
+          personagens={personagens.filter(personagem => personagem.filiacao === filiacao.nome)}
+          aoDeletar={deletarColaborador}
+          mudarCor={mudarCorDaFiliacao}
+          // aoFavoritar={resolverFavorito}
+        ></Filiação>)}
     </div>
   );
 }
